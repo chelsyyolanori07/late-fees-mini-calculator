@@ -4,11 +4,25 @@ const calculateFee = () => {
   const studentName = document.getElementById('studentName').value;
   const hoursLate = parseFloat(document.getElementById('hoursLate').value) || 0;
   const minutesLate = parseFloat(document.getElementById('minutesLate').value) || 0;
+
+  if (!studentName) {
+    alert("Please don't forget to enter your student name :)");
+    return;
+  }
+
+  if ((!hoursLate && !minutesLate) || (hoursLate < 0 || minutesLate < 0) || (isNaN(hoursLate) && isNaN(minutesLate))) {
+    alert("Please enter a valid number of hours and/or minutes :)");
+    return;
+  }
+
+  const hoursLateFloat = parseFloat(hoursLate) || 0;
+  const minutesLateFloat = parseFloat(minutesLate) || 0;
+
   const totalLateMinutes = (hoursLate * 60) + minutesLate;
   const feePerMinute = 10000 / 60;
   const totalFee = Math.round(totalLateMinutes * feePerMinute);
 
-  studentData.push({studentName, hoursLate, minutesLate, totalFee: totalFee.toFixed(2) });
+  studentData.push({ studentName, hoursLate: hoursLateFloat, minutesLate: minutesLateFloat, totalFee: totalFee.toFixed(2) });
 
   updateTable();
   saveData();
