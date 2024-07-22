@@ -21,8 +21,9 @@ const calculateFee = () => {
   const totalLateMinutes = (hoursLate * 60) + minutesLate;
   const feePerMinute = 10000 / 60;
   const totalFee = Math.round(totalLateMinutes * feePerMinute);
+  const formattedTotalFee = new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(totalFee);
 
-  studentData.push({ studentName, hoursLate: hoursLateFloat, minutesLate: minutesLateFloat, totalFee: totalFee.toFixed(2) });
+  studentData.push({ studentName, hoursLate: hoursLateFloat, minutesLate: minutesLateFloat, totalFee: formattedTotalFee });
 
   updateTable();
   saveData();
