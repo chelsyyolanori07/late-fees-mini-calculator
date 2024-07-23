@@ -2,7 +2,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: center;
-  height: 100vh;
+  align-items: center;
+  min-height: 100%;
   margin: 0;
   background: linear-gradient(135deg, #d8d2d2, #dcdcdc);
   font-weight: bold;
@@ -14,18 +15,21 @@ h1 {
 }
 
 .calculator {
-  background: linear-gradient(135deg, #eee5e5, #dcdcdc);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, #eee5e5, #dcdcdc);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   justify-content: center;
-  max-width: 500px;
+  max-width: 100%;
+  max-height: 100%;
+  margin-top: 50px;
+  overflow: auto;
 }
 
 label, input {
   display: block;
   margin: 10px 0;
-  padding: 5px;
+  padding: 7px;
 }
 
 .input {
@@ -49,13 +53,14 @@ button:hover {
 }
  
 table {
-  width: 100%;
+  max-width: 100%;
   margin-top: 30px;
+  margin-bottom: 30px;
   border-collapse: collapse;
 }
 
 th, td {
-  padding: 10px;
+  padding: 5px;
   border: 2px solid black;
   text-align: center;
   font-size: 14px;

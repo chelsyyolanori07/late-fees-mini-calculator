@@ -35,12 +35,13 @@ const updateTable = () => {
   const tableBody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
   tableBody.innerHTML = '';
 
-  studentData.forEach(data => {
+  studentData.forEach((data, index) => {
     const row = tableBody.insertRow();
-    row.insertCell(0).innerText = data.studentName;
-    row.insertCell(1).innerText = data.hoursLate;
-    row.insertCell(2).innerText = data.minutesLate;
-    row.insertCell(3).innerText = data.totalFee;
+    row.insertCell(0).innerText = index + 1;
+    row.insertCell(1).innerText = data.studentName;
+    row.insertCell(2).innerText = data.hoursLate;
+    row.insertCell(3).innerText = data.minutesLate;
+    row.insertCell(4).innerText = data.totalFee;
   });
 };
 
