@@ -13,7 +13,7 @@ const calculateFee = () => {
   }
 
   if ((!hoursLate && !minutesLate) || (hoursLate < 0 || minutesLate < 0) || (isNaN(hoursLate) && isNaN(minutesLate))) {
-    alert("Please input a valid total time. Thank you :)");
+    alert("Please input a valid total hours/minutes. Thank you :)");
     return;
   }
 
@@ -51,9 +51,9 @@ const updateTable = () => {
 const downloadData = () => {
   const ws = XLSX.utils.json_to_sheet(studentData);
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Uang Denda Telat");
+  XLSX.utils.book_append_sheet(wb, ws, "Late Fees");
 
-  XLSX.writeFile(wb, "UangDendaTelat.xlsx");
+  XLSX.writeFile(wb, "LateFees.xlsx");
 };
 
 const clearData = () => {
@@ -106,7 +106,7 @@ const undo = () => {
     saveData();
     saveStacks();
   } else {
-    alert("Sorry, there are no more actions to undo");
+    alert("Sorry, there are no more actions to undo..");
   }
 }
 
@@ -118,7 +118,7 @@ const redo = () => {
     saveData();
     saveStacks();
   } else {
-    alert("Sorry, there are no more actions to redo");
+    alert("Sorry, there are no more actions to redo..");
   }
 }
 
