@@ -1,4 +1,6 @@
 let studentData = [];
+let undoStack = [];
+let redoStack = [];
 
 const calculateFee = () => {
   const studentName = document.getElementById('studentName').value;
@@ -6,28 +8,29 @@ const calculateFee = () => {
   const minutesLate = parseFloat(document.getElementById('minutesLate').value) || 0;
 
   if (!studentName) {
-    alert("Please don't forget to enter your student name :)");
+    alert("Please don't forget to input the student's name. Thank you :)");
     return;
   }
 
   if ((!hoursLate && !minutesLate) || (hoursLate < 0 || minutesLate < 0) || (isNaN(hoursLate) && isNaN(minutesLate))) {
-    alert("Please enter a valid number of hours and/or minutes :)");
+    alert("Please input a valid total time. Thank you :)");
     return;
   }
-
-  const hoursLateFloat = parseFloat(hoursLate) || 0;
-  const minutesLateFloat = parseFloat(minutesLate) || 0;
 
   const totalLateMinutes = (hoursLate * 60) + minutesLate;
   const feePerMinute = 10000 / 60;
   const totalFee = Math.round(totalLateMinutes * feePerMinute);
   const formattedTotalFee = new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(totalFee);
 
-  studentData.push({ studentName, hoursLate: hoursLateFloat, minutesLate: minutesLateFloat, totalFee: formattedTotalFee });
+  undoStack.push([...studentData]);
+  saveStacks();
+  redoStack = [];
+
+  studentData.push({ studentName, hoursLate, minutesLate, totalFee: formattedTotalFee });
 
   updateTable();
   saveData();
-
+  
   document.getElementById('resultTable').classList.remove('hidden');
 };
 
@@ -48,12 +51,16 @@ const updateTable = () => {
 const downloadData = () => {
   const ws = XLSX.utils.json_to_sheet(studentData);
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Late Fees");
+  XLSX.utils.book_append_sheet(wb, ws, "Uang Denda Telat");
 
-  XLSX.writeFile(wb, "LateFees.xlsx");
+  XLSX.writeFile(wb, "UangDendaTelat.xlsx");
 };
 
 const clearData = () => {
+  undoStack.push([...studentData]);
+  saveStacks();
+  redoStack = [];
+
   studentData = [];
   document.getElementById('studentName').value = '';
   document.getElementById('hoursLate').value = '';
@@ -70,12 +77,49 @@ const loadData = () => {
     updateTable();
     document.getElementById('resultTable').classList.remove('hidden');
   }
+
+  const storedUndoStack = localStorage.getItem('undoStack');
+  if (storedUndoStack) {
+    undoStack = JSON.parse(storedUndoStack);
+  }
+
+  const storedRedoStack = localStorage.getItem('redoStack');
+  if (storedRedoStack) {
+    redoStack = JSON.parse(storedRedoStack);
+  }
 }
 
 const saveData = () => {
   localStorage.setItem('studentData', JSON.stringify(studentData));
 }
 
+const saveStacks = () => {
+  localStorage.setItem('undoStack', JSON.stringify(undoStack));
+  localStorage.setItem('redoStack', JSON.stringify(redoStack));
+}
+
+const undo = () => {
+  if (undoStack.length > 0) {
+    redoStack.push([...studentData]);
+    studentData = undoStack.pop();
+    updateTable();
+    saveData();
+    saveStacks();
+  } else {
+    alert("Sorry, there are no more actions to undo");
+  }
+}
+
+const redo = () => {
+  if (redoStack.length > 0) {
+    undoStack.push([...studentData]);
+    studentData = redoStack.pop();
+    updateTable();
+    saveData();
+    saveStacks();
+  } else {
+    alert("Sorry, there are no more actions to redo");
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadData);
-
-
